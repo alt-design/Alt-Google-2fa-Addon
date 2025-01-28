@@ -1,34 +1,22 @@
-# Alt Redirect
+# Alt Google 2FA Addon
 
-> Ez IP blocking, whitelist or blackist IPs to control who can access your creation.
+> Google 2FA - just easier.
+
 
 ## Features
 
-- IP Whitelisting and Blacklisting
-- "Blocked" page shown to the user when they get blocked
-- Support for returning a custom view when a request is blocked
-- CSV Imports and Exports
+- Select who needs 2FA enforced by super users and roles
+- Select optional user roles that can access 2FA
 
 ## How to Install
 
-You can search for this addon in the `Tools > Addons` section of the Statamic control panel and click **install**, or run the following command from your project root:
-
 ``` bash
-composer require alt-design/alt-blocker
+composer require alt-design/alt-google-2fa-addon
 ```
 
 ## Basic usage
 
-Head into your Statamic control panel and find "Alt Blocker" on the left sidebar to bring up the controls for the addon.
-
-Just take an IP address and add it at the top, then hit save.
-
-There is a toggle to toggle between whitelist and blacklist, then you're gravy
-
-Example IP : 
-```
-192.168.1.1
-```
+Todo
 
 ## Questions etc
 
