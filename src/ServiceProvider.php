@@ -1,8 +1,18 @@
-<?php namespace AltDesign\AltGoogle2FA;
+<?php
+
+namespace AltDesign\AltGoogle2FA;
 
 use Statamic\Facades\CP\Nav;
 use Statamic\Providers\AddonServiceProvider;
 
+/**
+ * Class ServiceProvider
+ *
+ * @package  AltDesign\AltGoogle2FA
+ * @author   The gang @ Alt Design <ben@alt-design.net>
+ * @license  Copyright (C) Alt Design Limited - All Rights Reserved - licensed under the MIT license
+ * @link     https://alt-design.net
+ */
 class ServiceProvider extends AddonServiceProvider
 {
     protected $viewNamespace = 'alt-google-2fa';

@@ -2,6 +2,7 @@
 
 > Google 2FA - just easier.
 
+Heavily uses https://github.com/antonioribeiro/google2fa-laravel - big shout out 🫶
 
 ## Features
 
