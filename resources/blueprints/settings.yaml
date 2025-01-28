@@ -1,0 +1,55 @@
+title: Redirects
+tabs:
+  main:
+    display: Main
+    sections:
+      -
+        fields:
+          -
+            handle: alt_google_2fa_forced_super_user
+            field:
+              type: radio
+              display: '2FA for Super Users'
+              instructions_position: above
+              listable: hidden
+              visibility: visible
+              replicator_preview: true
+              input_type: text
+              antlers: false
+              hide_display: false
+              width: 100
+              inline: true
+              default: off
+              options:
+                - key: enforce
+                  value: Enforced
+                - key: optional
+                  value: Optional
+                - key: off
+                  value: Off
+          -
+            handle: alt_google_2fa_forced_roles
+            field:
+              type: user_roles
+              display: 'Enforce for these user roles'
+              instructions_position: above
+              listable: hidden
+              visibility: visible
+              replicator_preview: true
+              input_type: text
+              antlers: false
+              hide_display: false
+              width: 50
+          -
+            handle: alt_google_2fa_optional_roles
+            field:
+              type: user_roles
+              display: 'Optional for these user roles'
+              instructions_position: above
+              listable: hidden
+              visibility: visible
+              replicator_preview: true
+              input_type: text
+              antlers: false
+              hide_display: false
+              width: 50

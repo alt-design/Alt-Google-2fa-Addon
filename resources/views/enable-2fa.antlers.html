@@ -1,0 +1,11 @@
+<div>
+    {{ AltGoogle2FA }}
+
+    <form action="{{ route:alt-google-2fa.verify }}" method="POST">
+        <input type="hidden" name="_token" value="{{ csrf_token }}">
+
+        <input name="one_time_password" type="text">
+
+        <button type="submit">Authenticates</button>
+    </form>
+</div>
