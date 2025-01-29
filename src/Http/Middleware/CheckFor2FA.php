@@ -7,7 +7,6 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 use AltDesign\AltGoogle2FA\Helpers\Data;
-use Statamic\Auth\Eloquent\User;
 
 class CheckFor2FA
 {
@@ -18,7 +17,14 @@ class CheckFor2FA
             return $next($request);
         }
 
-        $user = User::find(Auth::id());
+        $userRepository = config('statamic.users.repository');
+        if($userRepository === 'file') {
+            $user = Auth::user();
+        } elseif ($userRepository === 'eloquent') {
+            $user = \Statamic\Auth\Eloquent\User::find(Auth::id());
+        } else {
+            throw new \Exception('User Repository not defined');
+        }
 
         $data = new Data('settings');
         $superUserPolicy = $data->data['alt_google_2fa_forced_super_user'] ?? 'off';
