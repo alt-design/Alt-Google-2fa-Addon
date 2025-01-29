@@ -12,10 +12,14 @@
         <form action="{{ route('alt-google-2fa.verify') }}" class="flex flex-col justify-center" method="POST">
             @csrf
 
-            <input name="one_time_password" type="text" class="input-text mb-4 bg-white text-black" placeholder="OTP Code">
+            <input name="one_time_password" type="text" required aria-label="One Time Password" class="input-text mb-4 bg-white text-black" placeholder="OTP Code">
 
             <button type="submit" class="btn btn-primary">Authenticate</button>
         </form>
+
+        @foreach ($errors->all() as $error)
+            <p class="mt-4 text-red-500">{{ $error }}</p>
+        @endforeach
 
         <a href="{{ route('statamic.logout') }}" class="underline mt-4 text-sm">
             Cancel & Logout
