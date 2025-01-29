@@ -25,7 +25,7 @@ class CheckFor2FA
         $optionalRoles = $data->data['alt_google_2fa_optional_roles'] ?? [];
 
         // Skip checking 2FA for routes related to 2FA (to prevent infinite loops)
-        if ($request->routeIs('alt-google-2fa.prompt', 'alt-google-2fa.enable-2fa', 'alt-google-2fa.verify')) {
+        if ($request->routeIs('alt-google-2fa.prompt', 'alt-google-2fa.enable-2fa', 'alt-google-2fa.verify', 'statamic.logout')) {
             return $next($request);
         }
 
