@@ -1,4 +1,6 @@
-<?php namespace AltDesign\AltGoogle2FA\Tags;
+<?php
+
+namespace AltDesign\AltGoogle2FA\Tags;
 
 use Illuminate\Support\Facades\Auth;
 use Statamic\Tags\Tags;
@@ -18,6 +20,8 @@ class AltGoogle2FA extends Tags
     protected static $handle = 'AltGoogle2FA';
 
     /**
+     * Generates the secret key for a user, then creates the QR code.
+     *
      * @return mixed - QR Code for setting the secret key.
      */
     public function index()
@@ -38,6 +42,8 @@ class AltGoogle2FA extends Tags
     }
 
     /**
+     * Checks if user is logged in, and if the user has 2FA enabled.
+     *
      * @return boolean
      */
     public function isEnabled()

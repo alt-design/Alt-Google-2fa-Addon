@@ -1,6 +1,6 @@
 # Alt Google 2FA Addon
 
-> Google 2FA - just easier.
+> Google 2FA - just not requiring like, an hour of setup and config.
 
 Heavily uses https://github.com/antonioribeiro/google2fa-laravel - big shout out 🫶
 
@@ -46,9 +46,13 @@ Want to use your own template? Don't blame ya! Luckily we've built a tag in to g
 </a>
 ```
 
-### Other Tags
+### Example manual inclusion of enabling/disabling 2FA.
 ```
-{{ alt-google-2fa:is-enabled }}
+{{ if {AltGoogle2FA:is-enabled} }}
+    <a href="{{ route:alt-google-2fa.disable-2fa }}">Disable</a>
+{{ else }}
+    <a href="{{ route:alt-google-2fa.enable-2fa }}">Enable</a>
+{{ /if }}
 ```
 
 ## Locked yourself out
@@ -59,7 +63,13 @@ Oop - you can just disable the settings using the content/alt-google-2fa/setting
 
 Drop us a big shout-out if you have any questions, comments, or concerns. We're always looking to improve our addons, so if you have any feature requests, we'd love to hear them.
 
-Also - check out our other addons!
+Also - check out our other Statamic bits!
+
+### Starter Kits
+- [Alt Starter Kit](https://statamic.com/starter-kits/alt-design/alt-starter-kit) 
+
+### Addons
+- [Alt SEO Addon](https://github.com/alt-design/Alt-SEO-Addon)
 - [Alt Redirect Addon](https://github.com/alt-design/Alt-Redirect-Addon)
 - [Alt Sitemap Addon](https://github.com/alt-design/Alt-Sitemap-Addon)
 - [Alt Akismet Addon](https://github.com/alt-design/Alt-Akismet-Addon)

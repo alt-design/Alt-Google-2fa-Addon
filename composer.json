@@ -1,6 +1,6 @@
 {
     "name": "alt-design/alt-google-2fa-addon",
-    "description": "Alt Google 2FA addon! Uses google2fa-laravel and connects it with Statamic.",
+    "description": "Alt Google 2FA addon! Uses google2fa-laravel to integrate it into Statamic.",
     "license": "MIT",
     "autoload": {
         "psr-4": {
@@ -8,7 +8,7 @@
         }
     },
     "require": {
-        "php": "^8.1",
+        "php": "^8.2",
         "statamic/cms": "^4.0|^5.0",
         "pragmarx/google2fa-laravel": "^2.0.0"
     },

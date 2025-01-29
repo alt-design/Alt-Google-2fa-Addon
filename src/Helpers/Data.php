@@ -8,8 +8,8 @@ use Statamic\Filesystem\Manager;
 /**
  * Class Data
  *
- * @package  AltDesign\AltSeo
- * @author   Ben Harvey <ben@alt-design.net>, Natalie Higgins <natalie@alt-design.net>
+ * @package  AltDesign\AltGoogle2FA
+ * @author   The gang @ Alt Design <ben@alt-design.net>
  * @license  Copyright (C) Alt Design Limited - All Rights Reserved - licensed under the MIT license
  * @link     https://alt-design.net
  */

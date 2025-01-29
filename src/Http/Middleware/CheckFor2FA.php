@@ -1,9 +1,12 @@
-<?php namespace AltDesign\AltGoogle2FA\Http\Middleware;
+<?php
 
-use AltDesign\AltGoogle2FA\Helpers\Data;
+namespace AltDesign\AltGoogle2FA\Http\Middleware;
+
 use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+
+use AltDesign\AltGoogle2FA\Helpers\Data;
 
 class CheckFor2FA
 {
