@@ -28,6 +28,8 @@ class AltGoogle2FA extends Tags
     {
         $user = Auth::user();
 
+        Google2FA::setQRCodeBackend('svg');
+
         // If we have no Secret Key already set for this user, get one added.
         if(empty($user->google_secret_2fa_key ?? false)) {
             $user->google_secret_2fa_key = Google2FA::generateSecretKey(16, '');
