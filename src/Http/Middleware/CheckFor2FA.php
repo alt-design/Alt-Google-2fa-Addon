@@ -48,7 +48,7 @@ class CheckFor2FA
                 return redirect()->route('alt-google-2fa.prompt'); // Redirect to 2FA prompt
             }
 
-            if (empty($user->google_secret_2fa_key)) {
+            if (!($user->enabled_2fa ?? false)) {
                 return redirect()->route('alt-google-2fa.enable-2fa'); // Redirect to enable 2FA
             }
         }

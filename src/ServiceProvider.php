@@ -3,6 +3,7 @@
 namespace AltDesign\AltGoogle2FA;
 
 use Statamic\Facades\CP\Nav;
+use Statamic\Http\Middleware\AuthGuard;
 use Statamic\Providers\AddonServiceProvider;
 
 /**
@@ -25,6 +26,9 @@ class ServiceProvider extends AddonServiceProvider
     protected $middlewareGroups = [
         'statamic.cp.authenticated' => [
             'alt-google-2fa' => \AltDesign\AltGoogle2FA\Http\Middleware\CheckFor2FA::class,
+        ],
+        AuthGuard::class => [
+            'alt-google-2fa' => \AltDesign\AltGoogle2FA\Http\Middleware\CheckFor2FA::class
         ]
     ];
 

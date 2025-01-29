@@ -17,7 +17,38 @@ composer require alt-design/alt-google-2fa-addon
 
 ## Basic usage
 
-Todo
+### Settings
+Just nip into the settings, few options
+
+- Enforced / Optional / Off
+  - **Enforced** - Users matching the criteria _have_ to have 2FA on to access the site.
+  - **Optional** - As it says on the tin, the routes are available if you fancy.
+  - **Off** - Just turns off the 2FA requirements for Super Users
+
+### Using your own template
+Want to use your own template? Don't blame ya! Luckily we've built a tag in to generate the QR code. Template just needs to vaguely look like this:
+```
+<!-- QR Tag -->
+<s:AltGoogle2FA /> (Blade) or {{ alt-google-2fa }} if you're using Antlers)
+
+<!-- OTP Form ->
+<form action="{{ route('alt-google-2fa.verify') }}" method="POST">
+    @csrf
+
+    <input name="one_time_password" type="text" placeholder="OTP Code">
+
+    <button type="submit" class="btn btn-primary">Authenticate</button>
+</form>
+
+<!-- Just so people don't get stuck -->
+<a href="{{ route('statamic.logout') }}"> 
+    Cancel & Logout
+</a>
+```
+
+## Locked yourself out
+
+Oop - you can just disable the settings using the content/alt-google-2fa/settings.yaml, or remove the 2FA field values on your user.
 
 ## Questions etc
 

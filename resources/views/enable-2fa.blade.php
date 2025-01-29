@@ -19,6 +19,6 @@
 
         <a href="{{ route('statamic.logout') }}" class="underline mt-4 text-sm">
             Cancel & Logout
-        </a>:
+        </a>
     </div>
 @endsection
