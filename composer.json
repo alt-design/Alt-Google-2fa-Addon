@@ -10,7 +10,8 @@
     "require": {
         "php": "^8.2",
         "statamic/cms": "^4.0|^5.0",
-        "pragmarx/google2fa-laravel": "^2.0.0"
+        "pragmarx/google2fa-laravel": "^2.0.0",
+        "bacon/bacon-qr-code": "^3.0.0"
     },
     "extra": {
         "statamic": {
