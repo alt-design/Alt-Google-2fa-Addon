@@ -8,6 +8,7 @@ Heavily uses https://github.com/antonioribeiro/google2fa-laravel - big shout out
 
 - Select who needs 2FA enforced by super users and roles
 - Select optional user roles that can access 2FA
+- Works on Front End and Control Panel
 
 ## How to Install
 
