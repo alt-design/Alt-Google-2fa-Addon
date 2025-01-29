@@ -46,5 +46,15 @@ class ServiceProvider extends AddonServiceProvider
     {
         $this->addToNav();
     }
+
+    public function boot()
+    {
+        parent::boot();
+
+        // Publish migrations
+        $this->publishes([
+            __DIR__ . '/../database/migrations/' => database_path('migrations'),
+        ], 'alt-google-2fa-migrations');
+    }
 }
 

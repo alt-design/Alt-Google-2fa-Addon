@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 use AltDesign\AltGoogle2FA\Helpers\Data;
+use Statamic\Auth\Eloquent\User;
 
 class CheckFor2FA
 {
@@ -17,7 +18,7 @@ class CheckFor2FA
             return $next($request);
         }
 
-        $user = Auth::user();
+        $user = User::find(Auth::id());
 
         $data = new Data('settings');
         $superUserPolicy = $data->data['alt_google_2fa_forced_super_user'] ?? 'off';

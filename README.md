@@ -55,6 +55,15 @@ Want to use your own template? Don't blame ya! Luckily we've built a tag in to g
 {{ /if }}
 ```
 
+## Using Database Users?
+
+No problemo! You'll just need to publish the database migration and run it!
+
+```
+php artisan vendor:publish --tag=alt-google-2fa-migrations
+php artisan migrate
+```
+
 ## Locked yourself out
 
 Oop - you can just disable the settings using the content/alt-google-2fa/settings.yaml, or remove the 2FA field values on your user.
