@@ -12,9 +12,9 @@ class CheckFor2FA
 {
     public function handle(Request $request, Closure $next)
     {
-        // Ensure the user is logged in
+        // We actually don't care if a user is logged in here, if they're not, let the requet of the middleware run.
         if (!Auth::check()) {
-            return redirect()->route('login');
+            return $next($request);
         }
 
         $user = Auth::user();
