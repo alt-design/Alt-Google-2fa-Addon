@@ -12,7 +12,7 @@ class CheckFor2FA
 {
     public function handle(Request $request, Closure $next)
     {
-        // We actually don't care if a user is logged in here, if they're not, let the requet of the middleware run.
+        // We actually don't care if a user is logged in here, if they're not, let the request of the middleware run.
         if (!Auth::check()) {
             return $next($request);
         }
