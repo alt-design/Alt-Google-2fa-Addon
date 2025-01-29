@@ -18,7 +18,7 @@ class AltGoogle2FA extends Tags
     protected static $handle = 'AltGoogle2FA';
 
     /**
-     * @return mixed
+     * @return mixed - QR Code for setting the secret key.
      */
     public function index()
     {
@@ -34,16 +34,18 @@ class AltGoogle2FA extends Tags
             config('app.name'),
             $user->email,
             $user->google_secret_2fa_key
-        );;
+        );
     }
 
-    public function enable()
+    /**
+     * @return boolean
+     */
+    public function isEnabled()
     {
-        // todo
-    }
+        if(!Auth::check()) {
+            return false;
+        }
 
-    public function disable()
-    {
-        // todo
+        return Auth::user()->enabled_2fa;
     }
 }

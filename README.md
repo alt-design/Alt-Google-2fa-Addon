@@ -46,6 +46,11 @@ Want to use your own template? Don't blame ya! Luckily we've built a tag in to g
 </a>
 ```
 
+### Other Tags
+```
+{{ alt-google-2fa:is-enabled }}
+```
+
 ## Locked yourself out
 
 Oop - you can just disable the settings using the content/alt-google-2fa/settings.yaml, or remove the 2FA field values on your user.

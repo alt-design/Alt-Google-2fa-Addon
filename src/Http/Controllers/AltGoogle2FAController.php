@@ -54,14 +54,12 @@ class AltGoogle2FAController
 
     public function enable()
     {
-        // Display the 2FA verification form
-        return view('alt-google-2fa::enable-2fa', ['csrf_token' => csrf_token()]);
+        return view('alt-google-2fa::enable-2fa');
     }
 
     public function show()
     {
-        // Display the 2FA verification form
-        return view('alt-google-2fa::attempt-otp', ['csrf_token' => csrf_token()]);
+        return view('alt-google-2fa::attempt-otp');
     }
 
     public function verify(Request $request)
@@ -90,4 +88,18 @@ class AltGoogle2FAController
         return redirect()->back()->withErrors(['Invalid token provided.']);
     }
 
+    public function disableForm()
+    {
+        return view('alt-google-2fa::disable-2fa');
+    }
+
+    public function disable()
+    {
+        $user = Auth::user();
+        $user->google_secret_2fa_key = null;
+        $user->enabled_2fa = false;
+        $user->saveQuietly();
+
+        return redirect()->to('/');
+    }
 }
