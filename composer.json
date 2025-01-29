@@ -1,5 +1,5 @@
 {
-    "name": "alt-design/alt-google-2fa-addon",
+    "name": "alt-design/alt-google-2fa",
     "description": "Alt Google 2FA addon! Uses google2fa-laravel to integrate it into Statamic.",
     "license": "MIT",
     "autoload": {
