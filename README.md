@@ -13,7 +13,7 @@ Heavily uses https://github.com/antonioribeiro/google2fa-laravel - big shout out
 ## How to Install
 
 ``` bash
-composer require alt-design/alt-google-2fa-addon
+composer require alt-design/alt-google-2fa
 ```
 
 ## Basic usage
