@@ -71,6 +71,11 @@ class CheckFor2FA
             }
         }
 
+        // If nothing is enforced for users.
+        if(empty($forcedRoles) && empty($optionalRoles)) {
+            return $next($request);
+        }
+
         // Default behavior: If 2FA settings don’t explicitly match the user, enforce it
         if (!session('2fa_verified') && !empty($user->google_secret_2fa_key) && ($user->enabled_2fa ?? false)) {
             return redirect()->route('alt-google-2fa.prompt'); // Redirect to 2FA prompt
