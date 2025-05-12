@@ -55,6 +55,24 @@ class ServiceProvider extends AddonServiceProvider
         $this->publishes([
             __DIR__ . '/../database/migrations/' => database_path('migrations'),
         ], 'alt-google-2fa-migrations');
+
+        $this->publishes([
+            __DIR__ . '/../routes/cp.php' => base_path('routes/vendor/alt-google-2fa/cp.php'),
+            __DIR__ . '/../routes/web.php' => base_path('routes/vendor/alt-google-2fa/web.php'),
+        ], 'alt-google-2fa-routes');
+    }
+
+    protected function bootRoutes()
+    {
+        $cpPath = base_path('routes/vendor/alt-google-2fa/cp.php');
+        $webPath = base_path('routes/vendor/alt-google-2fa/web.php');
+        if (file_exists($cpPath)) {
+            $this->routes['cp'] = $cpPath;
+        }
+        if (file_exists($webPath)) {
+            $this->routes['web'] = $webPath;
+        }
+        return parent::bootRoutes();
     }
 }
 
