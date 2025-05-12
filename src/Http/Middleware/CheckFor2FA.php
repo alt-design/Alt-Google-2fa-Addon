@@ -3,6 +3,7 @@
 namespace AltDesign\AltGoogle2FA\Http\Middleware;
 
 use Closure;
+use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -30,6 +31,15 @@ class CheckFor2FA
         $superUserPolicy = $data->data['alt_google_2fa_forced_super_user'] ?? 'off';
         $forcedRoles = $data->data['alt_google_2fa_forced_roles'] ?? [];
         $optionalRoles = $data->data['alt_google_2fa_optional_roles'] ?? [];
+        $noRedirectUnverified = $data->data['alt_google_2fa_unverified_user_no_redirect'] ?? false;
+
+        if ($noRedirectUnverified) {
+            // If user's email requires verification, skip this until they're verified
+            $authUser = Auth::user();
+            if ($authUser instanceof MustVerifyEmail && !$authUser->hasVerifiedEmail()) {
+                return $next($request);
+            }
+        }
 
         // Skip checking 2FA for routes related to 2FA (to prevent infinite loops)
         if ($request->routeIs('alt-google-2fa.prompt', 'alt-google-2fa.enable-2fa', 'alt-google-2fa.verify', 'statamic.logout')) {
