@@ -65,11 +65,11 @@ class CheckFor2FA
         if (!empty(array_intersect($userRoles, $forcedRoles))) {
             // Enforce 2FA for roles listed in `alt_google_2fa_forced_roles`
             if (!session('2fa_verified') && !empty($user->google_secret_2fa_key) && ($user->enabled_2fa ?? false)) {
-                return redirect()->route('alt-google-2fa.prompt'); // Redirect to 2FA prompt
+                return $this->redirectToRouteSaveReferrer('alt-google-2fa.prompt'); // Redirect to 2FA prompt
             }
 
             if (!($user->enabled_2fa ?? false)) {
-                return redirect()->route('alt-google-2fa.enable-2fa'); // Redirect to enable 2FA
+                return $this->redirectToRouteSaveReferrer('alt-google-2fa.enable-2fa'); // Redirect to enable 2FA
             }
         }
 
@@ -82,20 +82,31 @@ class CheckFor2FA
         }
 
         // If nothing is enforced for users.
-        if(empty($forcedRoles) && empty($optionalRoles)) {
+        if(!$isSuperUser && empty($forcedRoles) && empty($optionalRoles)) {
             return $next($request);
         }
 
         // Default behavior: If 2FA settings don’t explicitly match the user, enforce it
         if (!session('2fa_verified') && !empty($user->google_secret_2fa_key) && ($user->enabled_2fa ?? false)) {
-            return redirect()->route('alt-google-2fa.prompt'); // Redirect to 2FA prompt
+            return $this->redirectToRouteSaveReferrer('alt-google-2fa.prompt'); // Redirect to 2FA prompt
         }
 
         if (empty($user->google_secret_2fa_key)) {
-            return redirect()->route('alt-google-2fa.enable-2fa'); // Redirect to enable 2FA
+            return $this->redirectToRouteSaveReferrer('alt-google-2fa.enable-2fa'); // Redirect to enable 2FA
         }
 
         // Proceed with the request if 2FA is verified
         return $next($request);
+    }
+
+    private function redirectToRouteSaveReferrer(
+        string $route
+    )
+    {
+        session()->put(
+            'url.intended',
+            request()->getRequestUri()
+        );
+        return redirect()->route($route);
     }
 }
