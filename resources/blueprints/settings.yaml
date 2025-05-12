@@ -28,6 +28,17 @@ tabs:
                 - key: off
                   value: Off
           -
+            handle: alt_google_2fa_unverified_user_no_redirect
+            field:
+              type: toggle
+              display: 'Disable redirect for users who have not verified their email address'
+              instructions_position: above
+              listable: hidden
+              visibility: visible
+              replicator_preview: true
+              antlers: false
+              hide_display: false
+          -
             handle: alt_google_2fa_forced_roles
             field:
               type: user_roles
