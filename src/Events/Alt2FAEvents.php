@@ -38,11 +38,35 @@ class Alt2FAEvents
     public function addUserFields(&$event)
     {
         $oldDirectory = Blueprint::directory();
-        // conditionally load the published blueprint
+        $authenticatedUser = $event->authenticatedUser;
+        $isCurrentUser = false;
+
+        // Check if the blueprint is being viewed in the user profile context
+        if (request()->is('cp/account')) {
+            $isCurrentUser = true;
+        }
+
+        // Fallback: Compare user ID if editing a user
+        if (request()->route('user')) {
+            $editedUser = request()->route('user');
+            $currentUser = $authenticatedUser->id;
+
+            $isCurrentUser = $editedUser === $currentUser;
+        }
+
+        // Default to the full blueprint
         $path = base_path('resources/blueprints/vendor/alt-google-2fa/2fa-user-fields.yaml');
 
         if (!file_exists($path)) {
             $path = __DIR__.'/../../resources/blueprints/2fa-user-fields.yaml';
+        }
+
+        // If they don't have permissions and it's for someone else, don't let them access it.
+        if (! $authenticatedUser?->hasPermission('edit user 2fa details')
+            && !$authenticatedUser->isSuper()
+            && !$isCurrentUser) {
+
+            $path = __DIR__.'/../../resources/blueprints/restricted/2fa-user-fields.yaml';
         }
 
         $blueprint = YAML::file($path)->parse();

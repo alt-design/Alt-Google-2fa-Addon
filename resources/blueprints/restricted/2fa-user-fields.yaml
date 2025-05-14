@@ -1,0 +1,21 @@
+tabs:
+  alt_password_protect:
+    display: 'Alt Two Factor'
+    sections:
+      -
+        fields:
+          -
+            handle: alt_google_2fa_two_factor_status
+            field:
+              type: alt_google_2fa_status
+              display: 'Two Factor Status'
+              width: 50
+          -
+            handle: enabled_2fa
+            field:
+              type: toggle
+              display: 'Enabled 2FA'
+              width: 50
+              listable: true
+              visibility: read_only
+title: 'Alt Two Factor User Fields'

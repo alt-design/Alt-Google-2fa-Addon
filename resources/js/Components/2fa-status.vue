@@ -13,14 +13,11 @@
 export default {
 
     mixins: [Fieldtype],
+    props: ['value', 'meta'],
 
     mounted()
     {
-        let values = this.$store.state.publish['base'].values;
-        console.log(values);
-        this.has2FAEnabled = values?.enabled_2fa ?? false;
-        this.hasOptIn = values?.user_opt_in ?? false;
-        this.calculateStatus();
+        this.setData(this.values);
     },
 
     data() {
@@ -32,7 +29,30 @@ export default {
         };
     },
 
+    computed: {
+        values() {
+            return Statamic.$store.state.publish['base'].values;
+        }
+    },
+
+    watch: {
+        values: {
+            handler(newVal, oldVal) {
+                this.setData(newVal);
+            },
+            deep: true
+        }
+    },
+
     methods : {
+
+        setData(data)
+        {
+            this.has2FAEnabled = data?.enabled_2fa ?? false;
+            this.hasOptIn = data?.user_opt_in ?? false;
+            this.calculateStatus();
+        },
+
         calculateStatus()
         {
             if (this.hasOptIn) {

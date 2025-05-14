@@ -88,6 +88,9 @@ class ServiceProvider extends AddonServiceProvider
         Permission::group('alt-google-2fa', 'Alt Google 2FA Addon', function () {
             Permission::register('reset user 2fa enrollments')
                 ->label('Reset User 2FA Enrollments');
+
+            Permission::register('edit user 2fa details')
+                ->label('Edit User 2FA Detail');
         });
 
         return $this;
