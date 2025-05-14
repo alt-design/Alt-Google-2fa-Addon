@@ -26,7 +26,11 @@
     },
     "config": {
         "allow-plugins": {
-            "pixelfear/composer-dist-plugin": false
+            "pixelfear/composer-dist-plugin": true
         }
-    }
+    },
+    "require-dev": {
+        "laravel/pint": "^1.22"
+    },
+    "type": "module"
 }

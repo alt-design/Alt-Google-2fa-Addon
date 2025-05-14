@@ -1,0 +1,49 @@
+tabs:
+  alt_password_protect:
+    display: 'Alt Two Factor'
+    sections:
+      -
+        fields:
+          -
+            handle: alt_google_2fa_two_factor_status
+            field:
+              type: alt_google_2fa_status
+              display: 'Two Factor Status'
+              width: 50
+          -
+            handle: buttons
+            field:
+              html: |-
+                <a x-bind:href="'/cp/alt-design/alt-disable-2fa?id=' + Statamic.$store.state.publish.base.values.id" class="flex items-center justify-center btn-flat w-full px-1">
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="w-5 h-5 mr-1">
+                	<path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M23.251 7.498V.748h-6.75m6.75 0-15 15m3-10.5h-9a1.5 1.5 0 0 0-1.5 1.5v15a1.5 1.5 0 0 0 1.5 1.5h15a1.5 1.5 0 0 0 1.5-1.5v-9"></path>	</svg>
+                  <span>Remove 2FA Key</span>
+                </a>
+              type: html
+              display: Buttons
+              width: 50
+          -
+            handle: user_opt_in
+            field:
+              type: toggle
+              display: 'User Opt-In'
+              width: 50
+          -
+            handle: enabled_2fa
+            field:
+              type: toggle
+              display: 'Enabled 2FA'
+              width: 50
+              listable: true
+              visibility: read_only
+      -
+        display: Hidden
+        fields:
+          -
+            handle: google_secret_2fa_key
+            field:
+              type: hidden
+              display: 'Google Secret 2FA Key'
+              listable: false
+              visibility: hidden
+title: 'Alt Two Factor User Fields'

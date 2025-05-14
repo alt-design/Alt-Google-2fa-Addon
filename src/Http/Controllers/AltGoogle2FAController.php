@@ -12,6 +12,7 @@ use PragmaRX\Google2FA\Exceptions\InvalidCharactersException;
 use PragmaRX\Google2FA\Exceptions\SecretKeyTooShortException;
 use PragmaRX\Google2FA\Google2FA;
 use Auth;
+use Statamic\Facades\User;
 
 class AltGoogle2FAController
 {
@@ -137,5 +138,36 @@ class AltGoogle2FAController
         $user->saveQuietly();
 
         return redirect()->to('/');
+    }
+
+    /**
+     * Disables 2FA on a users model.
+     *
+     * @return RedirectResponse
+     */
+    public function disableTargetUser(
+        Request $request
+    ) {
+        $request->validate([
+                'id' => 'required|max:36'
+            ],
+            [
+                'id.required' => 'an ID is required',
+                'id.max' => 'your ID is too long',
+            ]
+        );
+
+        $loggedInUser = User::current();
+        if (! $loggedInUser?->hasPermission('reset user 2fa enrollments')
+            && !$loggedInUser->isSuper()){
+            return redirect()->back()->with('error', 'Incorrect Permissions');
+        }
+
+        $user = User::find($request->get('id'));
+        $user->google_secret_2fa_key = null;
+        $user->enabled_2fa = false;
+        $user->saveQuietly();
+
+        return redirect()->back()->with('success', '2FA disabled');
     }
 }
