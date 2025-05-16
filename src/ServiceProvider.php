@@ -106,11 +106,11 @@ class ServiceProvider extends AddonServiceProvider
 
     public function bootAddon(): void
     {
-        $this->registerPermissions()
-            ->addToNav()
+        $this->addToNav()
             ->registerEvents()
+            ->registerPublishes()
             ->registerFieldtypes()
-            ->registerPublishes();
+            ->registerPermissions();
     }
 
 }
