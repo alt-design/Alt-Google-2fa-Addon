@@ -66,14 +66,13 @@ export default {
                 return;
             }
 
+            this.colour = 'slate-400'
             if (!this.has2FAEnabled) {
                 this.status = 'Not Enrolled'
-                this.colour = 'slate-400'
                 return;
             }
 
-            this.status = 'Enrolled'
-            this.colour = 'cpGreen'
+            this.status = 'Enrolled - Inactive'
             return;
         }
     }
