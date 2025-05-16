@@ -62,7 +62,7 @@ class CheckFor2FA
         $userRoles = $user->roles()->map->handle()->toArray(); // Assuming roles can be retrieved and handles mapped.
 
         // Check if 2FA is enforced for the user's roles
-        if (!empty(array_intersect($userRoles, $forcedRoles))) {
+        if (!empty(array_intersect($userRoles, $forcedRoles)) || $user->user_opt_in) {
             // Enforce 2FA for roles listed in `alt_google_2fa_forced_roles`
             if (!session('2fa_verified') && !empty($user->google_secret_2fa_key) && ($user->enabled_2fa ?? false)) {
                 return $this->redirectToRouteSaveReferrer('alt-google-2fa.prompt'); // Redirect to 2FA prompt
