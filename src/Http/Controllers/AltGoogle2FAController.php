@@ -157,13 +157,19 @@ class AltGoogle2FAController
             ]
         );
 
+        $id = $request->get('id');
         $loggedInUser = User::current();
-        if (! $loggedInUser?->hasPermission('reset user 2fa enrollments')
-            && !$loggedInUser->isSuper()){
+
+        if ((! $loggedInUser->can('reset user 2fa enrollments')) &&
+            $loggedInUser != $id){
             return redirect()->back()->with('error', 'Incorrect Permissions');
         }
 
-        $user = User::find($request->get('id'));
+        $user = User::find($id);
+        if (! $user){
+            return redirect()->back()->with('error', 'Incorrect User Id');
+        }
+
         $user->google_secret_2fa_key = null;
         $user->enabled_2fa = false;
         $user->saveQuietly();
