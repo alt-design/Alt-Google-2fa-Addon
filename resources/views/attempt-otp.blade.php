@@ -10,7 +10,15 @@
         <form action="{{ route('alt-google-2fa.verify') }}" class="flex flex-col justify-center" method="POST">
             @csrf
 
-            <input name="one_time_password" type="text" required aria-label="One Time Password" class="input-text mb-4 bg-white text-black" placeholder="OTP Code">
+            <input name="one_time_password"
+                   autocomplete="one-time-code"
+                   inputmode="numeric"
+                   pattern="[0-9]*"
+                   type="text"
+                   required
+                   aria-label="One Time Password"
+                   class="input-text mb-4 bg-white text-black"
+                   placeholder="OTP Code">
 
             <button type="submit" class="btn btn-primary">Authenticate</button>
         </form>
