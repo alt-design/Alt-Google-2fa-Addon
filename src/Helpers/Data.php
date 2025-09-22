@@ -1,67 +1,45 @@
 <?php namespace AltDesign\AltGoogle2FA\Helpers;
 
 use Statamic\Fields\BlueprintRepository;
-
 use Statamic\Facades\YAML;
 use Statamic\Filesystem\Manager;
 
-/**
- * Class Data
- *
- * @package  AltDesign\AltGoogle2FA
- * @author   The gang @ Alt Design <ben@alt-design.net>
- * @license  Copyright (C) Alt Design Limited - All Rights Reserved - licensed under the MIT license
- * @link     https://alt-design.net
- */
+
 class Data
 {
-    /**
-     * @var
-     */
-    public $type;
 
-    /**
-     * @var Manager - The manager class for Statamic
-     */
-    public $manager;
+    protected string $type = 'settings';
 
-    /**
-     * @var mixed|null
-     */
-    public $currentFile;
+    protected $currentFile;
 
-    /**
-     * @var array
-     */
-    public $data;
+    protected array $data;
 
-    /**
-     * Data constructor.
-     *
-     * @param $type
-     */
-    public function __construct($type)
+    public function __construct(protected Manager $manager)
     {
-        $this->type = $type;
 
-        // New up Statamic File Manager
-        $this->manager = new Manager();
-
-        // Grab the current file we're working with
         $this->currentFile = $this->manager->disk()->get('content/alt-google-2fa/' . $this->type . '.yaml');
 
         $this->data = Yaml::parse($this->currentFile);
     }
 
-    /**
-     * Gets data from the Yaml file by key.
-     *
-     * @param $key
-     * @return mixed|null
-     */
-    public function get($key)
+    public function superUserPolicy(): string
     {
-        return $this->data[$key] ?? null;
+        return $this->data['alt_google_2fa_forced_super_user'] ?? 'off';
+    }
+
+    public function forcedRoles(): array
+    {
+        return $this->data['alt_google_2fa_forced_roles'] ?? [];
+    }
+
+    public function optionalRoles(): array
+    {
+        return $this->data['alt_google_2fa_optional_roles'] ?? [];
+    }
+
+    public function noRedirectUnverified(): bool
+    {
+        return $this->data['alt_google_2fa_unverified_user_no_redirect'] ?? false;
     }
 
     public function getBlueprint($default = false)
@@ -73,37 +51,12 @@ class Data
         return false;
     }
 
-    /**
-     * Sets data in the Yaml file by key.
-     *
-     * @param $key
-     * @param $value
-     * @return void
-     */
-    public function set($key, $value)
-    {
-        $this->data[$key] = $value;
-
-        Yaml::dump($this->data, $this->currentFile);
-    }
-
-    /**
-     * Returns all data from the Yaml file.
-     *
-     * @return array
-     */
-    public function all()
+    public function all(): array
     {
         return $this->data;
     }
 
-    /**
-     * Sets all data in the Yaml file.
-     *
-     * @param $data
-     * @return void
-     */
-    public function setAll($data)
+    public function setAll(array $data): void
     {
         $this->data = $data;
 

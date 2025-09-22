@@ -5,7 +5,6 @@ use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-
 use AltDesign\AltGoogle2FA\Helpers\Data;
 use PragmaRX\Google2FA\Exceptions\IncompatibleWithGoogleAuthenticatorException;
 use PragmaRX\Google2FA\Exceptions\InvalidCharactersException;
@@ -19,10 +18,8 @@ class AltGoogle2FAController
     /**
      *  Render the default options page.
      */
-    public function index()
+    public function index(Data $data)
     {
-        $data = new Data('settings');
-
         $blueprint = $data->getBlueprint(true);
         $fields = $blueprint->fields()->addValues($data->all())->preProcess();
 
@@ -44,10 +41,8 @@ class AltGoogle2FAController
      * @param Request $request
      * @return mixed
      */
-    public function update(Request $request)
+    public function update(Request $request, Data $data)
     {
-        $data = new Data('settings');
-
         // Set the fields etc
         $blueprint = $data->getBlueprint(true);
         $fields = $blueprint->fields()->addValues($request->all());
@@ -98,9 +93,8 @@ class AltGoogle2FAController
      * @throws InvalidCharactersException
      * @throws SecretKeyTooShortException
      */
-    public function verify(Request $request)
+    public function verify(Request $request, Google2FA $google2fa)
     {
-        $google2fa = new Google2FA();
 
         // Retrieve logged-in user's 2FA secret
         $user = Auth::user();

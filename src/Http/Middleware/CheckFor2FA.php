@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Auth;
 use AltDesign\AltGoogle2FA\Helpers\Data;
 use Illuminate\Support\Facades\Redirect;
 use Statamic\Auth\Eloquent\User;
+use Illuminate\Contracts\Auth\MustVerifyEmail;
 
 class CheckFor2FA
 {
@@ -17,26 +18,41 @@ class CheckFor2FA
         'statamic.logout',
     ];
 
+    public function __construct(protected Data $data)
+    {
+
+    }
+
     public function handle(Request $request, Closure $next)
     {
+        $user = $this->getUser();
+
         if (
-            !Auth::check() ||
+            !$user ||
             $request->routeIs(...$this->skipRoutes) ||
             session('2fa_verified') ||
-            $request->isXmlHttpRequest()
+            $request->isXmlHttpRequest() ||
+            ($this->data->noRedirectUnverified() && $user instanceof MustVerifyEmail && !$user->hasVerifiedEmail())
         ) {
             return $next($request);
         }
 
-        $user  = $this->getUser();
-        $check = $this->checkFor2FA(
+        $route = !empty($user->google_secret_2fa_key) ? 'alt-google-2fa.prompt' : 'alt-google-2fa.enable-2fa';
+        if ($request->routeIs($route)) {
+            return $next($request);
+        }
+
+        $isEnforced = $this->enforced(
             userRoles: $user->roles()->map->handle()->toArray(),
             isSuperUser: $user->isSuper(),
-            enabled: $user->enabled_2fa,
         );
 
-        $route = $user->enabled_2fa ? 'alt-google-2fa.prompt' : 'alt-google-2fa.enable-2fa';
-        if ($check && !$request->routeIs($route)) {
+        $isOptional = $this->optional(
+            userRoles: $user->roles()->map->handle()->toArray(),
+            isSuperUser: $user->isSuper(),
+        );
+
+        if ($isEnforced || ($isOptional && $user->enabled_2fa)) {
             Redirect::setIntendedUrl($request->fullUrl());
             return redirect()->route($route);
         }
@@ -44,36 +60,38 @@ class CheckFor2FA
         return $next($request);
     }
 
-    protected function checkFor2FA(array $userRoles, bool $isSuperUser, bool $enabled): bool
+    protected function enforced(array $userRoles, bool $isSuperUser): bool
     {
-        $data = new Data('settings');
-        $superUserPolicy = $data->data['alt_google_2fa_forced_super_user'] ?? 'off';
-        $forcedRoles = $data->data['alt_google_2fa_forced_roles'] ?? [];
-        $optionalRoles = $data->data['alt_google_2fa_optional_roles'] ?? [];
-
-        if ($isSuperUser) {
-            if ($superUserPolicy === 'enforce' || ($superUserPolicy === 'optional' && $enabled)) {
-                return true;
-            }
-        }
-
-        if (!empty(array_intersect($userRoles, $forcedRoles))) {
+        if ($isSuperUser && $this->data->superUserPolicy() === 'enforce') {
             return true;
         }
 
-        if (!empty(array_intersect($userRoles, $optionalRoles)) && $enabled) {
+        if (!empty(array_intersect($userRoles, $this->data->forcedRoles()))) {
             return true;
         }
 
         return false;
     }
 
-    protected function getUser(): Authenticatable|User
+    protected function optional(array $userRoles, bool $isSuperUser): bool
+    {
+        if ($isSuperUser && $this->data->superUserPolicy() === 'optional') {
+            return true;
+        }
+
+        if (!empty(array_intersect($userRoles, $this->data->optionalRoles()))) {
+            return true;
+        }
+
+        return false;
+    }
+
+    protected function getUser(): Authenticatable|User|null
     {
         $userRepository = config('statamic.users.repository');
         return match($userRepository) {
             'file' => Auth::user(),
-            'eloquent' => \Statamic\Auth\Eloquent\User::find(Auth::id()) ?? throw new \Exception('User not found'),
+            'eloquent' => \Statamic\Auth\Eloquent\User::find(Auth::id()),
             default => throw new \Exception('User Repository not defined'),
         };
     }
