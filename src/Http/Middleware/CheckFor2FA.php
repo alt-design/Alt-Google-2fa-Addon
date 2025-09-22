@@ -3,99 +3,78 @@
 namespace AltDesign\AltGoogle2FA\Http\Middleware;
 
 use Closure;
-use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-
 use AltDesign\AltGoogle2FA\Helpers\Data;
+use Illuminate\Support\Facades\Redirect;
+use Statamic\Auth\Eloquent\User;
 
 class CheckFor2FA
 {
+    protected array $skipRoutes = [
+        'alt-google-2fa.verify',
+        'statamic.logout',
+    ];
+
     public function handle(Request $request, Closure $next)
     {
-        // We actually don't care if a user is logged in here, if they're not, let the request of the middleware run.
-        if (!Auth::check()) {
+        if (
+            !Auth::check() ||
+            $request->routeIs(...$this->skipRoutes) ||
+            session('2fa_verified') ||
+            $request->isXmlHttpRequest()
+        ) {
             return $next($request);
         }
 
-        $userRepository = config('statamic.users.repository');
-        if($userRepository === 'file') {
-            $user = Auth::user();
-        } elseif ($userRepository === 'eloquent') {
-            $user = \Statamic\Auth\Eloquent\User::find(Auth::id());
-        } else {
-            throw new \Exception('User Repository not defined');
+        $user  = $this->getUser();
+        $check = $this->checkFor2FA(
+            userRoles: $user->roles()->map->handle()->toArray(),
+            isSuperUser: $user->isSuper(),
+            enabled: $user->enabled_2fa,
+        );
+
+        $route = $user->enabled_2fa ? 'alt-google-2fa.prompt' : 'alt-google-2fa.enable-2fa';
+        if ($check && !$request->routeIs($route)) {
+            Redirect::setIntendedUrl($request->fullUrl());
+            return redirect()->route($route);
         }
 
+        return $next($request);
+    }
+
+    protected function checkFor2FA(array $userRoles, bool $isSuperUser, bool $enabled): bool
+    {
         $data = new Data('settings');
         $superUserPolicy = $data->data['alt_google_2fa_forced_super_user'] ?? 'off';
         $forcedRoles = $data->data['alt_google_2fa_forced_roles'] ?? [];
         $optionalRoles = $data->data['alt_google_2fa_optional_roles'] ?? [];
-        $noRedirectUnverified = $data->data['alt_google_2fa_unverified_user_no_redirect'] ?? false;
-
-        if ($noRedirectUnverified) {
-            // If user's email requires verification, skip this until they're verified
-            $authUser = Auth::user();
-            if ($authUser instanceof MustVerifyEmail && !$authUser->hasVerifiedEmail()) {
-                return $next($request);
-            }
-        }
-
-        // Skip checking 2FA for routes related to 2FA (to prevent infinite loops)
-        if ($request->routeIs('alt-google-2fa.prompt', 'alt-google-2fa.enable-2fa', 'alt-google-2fa.verify', 'statamic.logout')) {
-            return $next($request);
-        }
-
-        $isSuperUser = $user->isSuper(); // Assuming `isSuper()` checks if the user is a superuser in Statamic.
 
         if ($isSuperUser) {
-            if ($superUserPolicy === 'off') {
-                // Superusers are not required to use 2FA
-                return $next($request);
-            } elseif ($superUserPolicy === 'optional' && !$user->enabled_2fa) {
-                // 2FA is optional but not enabled
-                return $next($request);
+            if ($superUserPolicy === 'enforce' || ($superUserPolicy === 'optional' && $enabled)) {
+                return true;
             }
         }
 
-        // Get user roles
-        $userRoles = $user->roles()->map->handle()->toArray(); // Assuming roles can be retrieved and handles mapped.
-
-        // Check if 2FA is enforced for the user's roles
         if (!empty(array_intersect($userRoles, $forcedRoles))) {
-            // Enforce 2FA for roles listed in `alt_google_2fa_forced_roles`
-            if (!session('2fa_verified') && !empty($user->google_secret_2fa_key) && ($user->enabled_2fa ?? false)) {
-                return redirect()->route('alt-google-2fa.prompt'); // Redirect to 2FA prompt
-            }
-
-            if (!($user->enabled_2fa ?? false)) {
-                return redirect()->route('alt-google-2fa.enable-2fa'); // Redirect to enable 2FA
-            }
+            return true;
         }
 
-        // Check if 2FA is optional for the user's roles
-        if (!empty(array_intersect($userRoles, $optionalRoles))) {
-            // If 2FA is optional and not enabled, allow access
-            if (empty($user->google_secret_2fa_key)) {
-                return $next($request);
-            }
+        if (!empty(array_intersect($userRoles, $optionalRoles)) && $enabled) {
+            return true;
         }
 
-        // If nothing is enforced for users.
-        if(empty($forcedRoles) && empty($optionalRoles)) {
-            return $next($request);
-        }
+        return false;
+    }
 
-        // Default behavior: If 2FA settings don’t explicitly match the user, enforce it
-        if (!session('2fa_verified') && !empty($user->google_secret_2fa_key) && ($user->enabled_2fa ?? false)) {
-            return redirect()->route('alt-google-2fa.prompt'); // Redirect to 2FA prompt
-        }
-
-        if (empty($user->google_secret_2fa_key)) {
-            return redirect()->route('alt-google-2fa.enable-2fa'); // Redirect to enable 2FA
-        }
-
-        // Proceed with the request if 2FA is verified
-        return $next($request);
+    protected function getUser(): Authenticatable|User
+    {
+        $userRepository = config('statamic.users.repository');
+        return match($userRepository) {
+            'file' => Auth::user(),
+            'eloquent' => \Statamic\Auth\Eloquent\User::find(Auth::id()) ?? throw new \Exception('User not found'),
+            default => throw new \Exception('User Repository not defined'),
+        };
     }
 }
