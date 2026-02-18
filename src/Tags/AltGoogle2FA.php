@@ -70,7 +70,7 @@ class AltGoogle2FA extends Tags
     public function FrontendAssets()
     {
         $vite = (new Vite)->useHotfile( $this->viteHot)->useBuildDirectory($this->viteBuild);
-        $assets = sprintf('<link rel="stylesheet" href="%s">', $vite->asset('resources/css/alt-google-2fa-addon.css'));
+        $assets = sprintf('<link rel="stylesheet" href="%s">', $vite->asset('resources/css/alt-google-2fa-frontend.css'));
         return $assets;
     }
 

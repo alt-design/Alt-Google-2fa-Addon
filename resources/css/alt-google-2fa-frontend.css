@@ -1,4 +1,6 @@
-@import "tailwindcss";
+@import "@statamic/cms/tailwind.css";
+@source inline("m-5 p-10");
+
 
 .alt-google-2fa {
     input[type="text"] {

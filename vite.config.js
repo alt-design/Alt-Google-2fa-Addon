@@ -6,12 +6,13 @@ import tailwindcss from '@tailwindcss/vite';
 export default defineConfig({
     plugins: [
         laravel({
+            hotFile: 'resources/dist/hot',
             input: [
-                'resources/css/alt-google-2fa-addon.css'
+                'resources/css/alt-google-2fa-frontend.css'
             ],
             publicDirectory: 'resources/dist',
         }),
-        statamic(),
         tailwindcss(),  
+        statamic(),
     ],
 });

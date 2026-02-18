@@ -27,7 +27,7 @@ class ServiceProvider extends AddonServiceProvider
 
     protected $vite = [
         'input' => [
-            'resources/css/alt-google-2fa-addon.css',
+            'resources/css/alt-google-2fa-frontend.css',
         ],
         'publicDirectory' => 'resources/dist',
     ];
