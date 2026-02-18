@@ -9,7 +9,7 @@
     <s:AltGoogle2FA:FrontendAssets />
 
 </head>
-    <body class="min-h-screen flex justify-center bg-gray-100 dark:bg-gray-900">
+    <body class="alt-google-2fa min-h-screen flex justify-center bg-gray-100 dark:bg-gray-900">
         <div>
             <div class="my-5 p-10 relative z-10">
                 <s:AltGoogle2FA:OutsideLogo />
