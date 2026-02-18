@@ -1,0 +1,9 @@
+@import "tailwindcss";
+
+input[type="text"] {
+    @apply p-2 rounded-md mb-4 bg-white text-black border border-gray-300; 
+}
+
+button {
+    @apply cursor-pointer bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-800 transition-colors duration-300;
+}

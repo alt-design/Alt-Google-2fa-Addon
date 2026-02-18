@@ -2,10 +2,12 @@
 
 namespace AltDesign\AltGoogle2FA\Tags;
 
+use AltDesign\AltGoogle2FA\View\Components\OutsideLogo;
+use Google2FA;
+
+use Illuminate\Foundation\Vite;
 use Illuminate\Support\Facades\Auth;
 use Statamic\Tags\Tags;
-
-use Google2FA;
 
 /**
  * Class AltGoogle2FA
@@ -17,6 +19,8 @@ use Google2FA;
  */
 class AltGoogle2FA extends Tags
 {
+    protected $viteBuild = 'vendor/alt-inbound/build';
+    protected $viteHot = __DIR__ . '/../../resources/dist/hot';
     protected static $handle = 'AltGoogle2FA';
 
     /**
@@ -55,5 +59,27 @@ class AltGoogle2FA extends Tags
         }
 
         return Auth::user()->enabled_2fa;
+    }
+
+    /**
+     * The {{ AltGoogle2FA:FrontendAssets }} tag.
+     * Puts the Vite assets on the frontend
+     * @return string|array
+     */
+    public function FrontendAssets()
+    {
+        $vite = (new Vite)->useHotfile( $this->viteHot)->useBuildDirectory($this->viteBuild);
+        $assets = sprintf('<link rel="stylesheet" href="%s">', $vite->asset('resources/css/alt-google-2fa-addon.css'));
+        return $assets;
+    }
+
+    /**
+     * The {{ AltGoogle2FA:OutsideLogo }} tag.
+     * Returns the outside logo component
+     * @return string
+     */
+    public function OutsideLogo()
+    {
+        return (new OutsideLogo)->render()->render() ?? '';
     }
 }

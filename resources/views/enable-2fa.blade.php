@@ -1,13 +1,13 @@
-@extends('statamic::outside')
+@extends('alt-google-2fa::layouts.layout')
 
 @section('content')
-    @include('statamic::partials.outside-logo')
+
     <div class="flex flex-col justify-center items-center">
-        <h1 class="mb-4">Enable 2FA</h1>
+        <h1 class="text-xl mb-4">Enable 2FA</h1>
 
         <s:AltGoogle2FA />
 
-        <p class="my-4 text-center">Scan the code above, then enter a 2FA code from your <br /> Google Authenticator to confirm the setup.</p>
+        <p class="my-4 text-center">Scan the code above, then enter a 2FA code from your Google Authenticator to confirm the setup.</p>
 
         <form action="{{ route('alt-google-2fa.verify') }}" class="flex flex-col justify-center" method="POST">
             @csrf
@@ -19,17 +19,16 @@
                    type="text"
                    required
                    aria-label="One Time Password"
-                   class="input-text mb-4 bg-white text-black"
                    placeholder="OTP Code">
 
-            <button type="submit" class="btn btn-primary">Authenticate</button>
+            <button type="submit">Authenticate</button>
         </form>
 
         @foreach ($errors->all() as $error)
             <p class="mt-4 text-red-500">{{ $error }}</p>
         @endforeach
 
-        <a href="{{ route('statamic.logout') }}" class="underline mt-4 text-sm">
+        <a href="{{ route('statamic.logout') }}" class="underline mt-4 text-sm text-gray-600 dark:text-gray-300">
             Cancel & Logout
         </a>
     </div>

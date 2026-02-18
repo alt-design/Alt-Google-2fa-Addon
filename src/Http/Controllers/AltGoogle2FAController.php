@@ -1,16 +1,21 @@
 <?php namespace AltDesign\AltGoogle2FA\Http\Controllers;
 
-use Illuminate\Contracts\Foundation\Application;
-use Illuminate\Contracts\View\Factory;
+use Auth;
+use Facades\Statamic\Version;
+use Illuminate\Support\Str;
+use Illuminate\Http\Request;
+use Statamic\CP\PublishForm;
+use PragmaRX\Google2FA\Google2FA;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
+use Illuminate\Contracts\View\Factory;
 use AltDesign\AltGoogle2FA\Helpers\Data;
-use PragmaRX\Google2FA\Exceptions\IncompatibleWithGoogleAuthenticatorException;
+use Illuminate\Contracts\Foundation\Application;
+use Illuminate\Support\Facades\Blade;
+use Inertia\Inertia;
 use PragmaRX\Google2FA\Exceptions\InvalidCharactersException;
 use PragmaRX\Google2FA\Exceptions\SecretKeyTooShortException;
-use PragmaRX\Google2FA\Google2FA;
-use Auth;
+use PragmaRX\Google2FA\Exceptions\IncompatibleWithGoogleAuthenticatorException;
 
 class AltGoogle2FAController
 {
@@ -27,6 +32,17 @@ class AltGoogle2FAController
         $contents = $blueprint->contents();
 
         $blueprint->setContents($contents);
+
+        // Statamic >= V6
+        if(intval(Str::before(Version::get(), '.')) >= 6) {
+            $blueprint->setNamespace('alt-google-2fa');
+
+            return PublishForm::make($blueprint)
+                ->title('Alt Google 2FA')
+                ->icon(config('alt-google-2fa.alt_google_2fa_icon'))
+                ->values($fields->values()->toArray())
+                ->submittingTo(cp_route('alt-google-2fa.save'), 'POST');
+        }
 
         return view('alt-google-2fa::index', [
             'blueprint' => $blueprint->toPublishArray(),
