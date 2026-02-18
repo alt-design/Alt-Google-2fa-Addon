@@ -2,11 +2,12 @@
 
 namespace AltDesign\AltGoogle2FA\Tags;
 
-use AltDesign\AltGoogle2FA\View\Components\OutsideLogo;
-use Google2FA;
+use Facades\Statamic\Version;
 
+use Google2FA;
 use Illuminate\Foundation\Vite;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Str;
 use Statamic\Tags\Tags;
 
 /**
@@ -80,6 +81,12 @@ class AltGoogle2FA extends Tags
      */
     public function OutsideLogo()
     {
-        return (new OutsideLogo)->render()->render() ?? '';
+        // Statamic V6+
+        if(intval(Str::before(Version::get(), '.')) >= 6) {
+            return (new \AltDesign\AltGoogle2FA\View\Components\OutsideLogo)->render()->render() ?? '';
+        }
+
+        // Statamic < V6
+        return view('statamic::partials.outside-logo')->render() ?? '';
     }
 }

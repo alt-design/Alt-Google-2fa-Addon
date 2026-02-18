@@ -1,4 +1,4 @@
-<div class="my-5 p-10 relative z-10">
+<div>
     <div class="flex items-center justify-center">
         <div class="max-h-[400px]">
             @if ($customLogo)
