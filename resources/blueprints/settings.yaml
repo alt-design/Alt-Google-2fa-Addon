@@ -5,6 +5,17 @@ tabs:
     sections:
       -
         fields:
+          - handle: addon_instructions
+            field:
+              type: section
+              display: 'Alt Google 2FA'
+              icon: section
+              instructions: "Settings for the Google 2FA integration. You may not have user roles if you're rocking the Free version of Statamic, in which case, 2FA for super users should be enough!"
+              listable: hidden
+              instructions_position: above
+              visibility: visible
+              replicator_preview: true
+              hide_display: false
           -
             handle: alt_google_2fa_forced_super_user
             field:

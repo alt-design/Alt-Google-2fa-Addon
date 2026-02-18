@@ -2,10 +2,13 @@
 
 namespace AltDesign\AltGoogle2FA\Tags;
 
-use Illuminate\Support\Facades\Auth;
-use Statamic\Tags\Tags;
+use Facades\Statamic\Version;
 
 use Google2FA;
+use Illuminate\Foundation\Vite;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Str;
+use Statamic\Tags\Tags;
 
 /**
  * Class AltGoogle2FA
@@ -17,6 +20,8 @@ use Google2FA;
  */
 class AltGoogle2FA extends Tags
 {
+    protected $viteBuild = 'vendor/alt-google-2fa/build';
+    protected $viteHot = __DIR__ . '/../../resources/dist/hot';
     protected static $handle = 'AltGoogle2FA';
 
     /**
@@ -55,5 +60,33 @@ class AltGoogle2FA extends Tags
         }
 
         return Auth::user()->enabled_2fa;
+    }
+
+    /**
+     * The {{ AltGoogle2FA:FrontendAssets }} tag.
+     * Puts the Vite assets on the frontend
+     * @return string|array
+     */
+    public function FrontendAssets()
+    {
+        $vite = (new Vite)->useHotfile( $this->viteHot)->useBuildDirectory($this->viteBuild);
+        $assets = sprintf('<link rel="stylesheet" href="%s">', $vite->asset('resources/css/alt-google-2fa-frontend.css'));
+        return $assets;
+    }
+
+    /**
+     * The {{ AltGoogle2FA:OutsideLogo }} tag.
+     * Returns the outside logo component
+     * @return string
+     */
+    public function OutsideLogo()
+    {
+        // Statamic V6+
+        if(intval(Str::before(Version::get(), '.')) >= 6) {
+            return (new \AltDesign\AltGoogle2FA\View\Components\OutsideLogo)->render()->render() ?? '';
+        }
+
+        // Statamic < V6
+        return view('statamic::partials.outside-logo')->render() ?? '';
     }
 }

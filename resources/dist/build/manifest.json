@@ -1,0 +1,11 @@
+{
+  "resources/css/alt-google-2fa-frontend.css": {
+    "file": "assets/alt-google-2fa-frontend-CnXNRMfL.css",
+    "src": "resources/css/alt-google-2fa-frontend.css",
+    "isEntry": true,
+    "name": "alt-google-2fa-frontend",
+    "names": [
+      "alt-google-2fa-frontend.css"
+    ]
+  }
+}
