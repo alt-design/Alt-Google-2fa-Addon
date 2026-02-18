@@ -11,8 +11,6 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Contracts\View\Factory;
 use AltDesign\AltGoogle2FA\Helpers\Data;
 use Illuminate\Contracts\Foundation\Application;
-use Illuminate\Support\Facades\Blade;
-use Inertia\Inertia;
 use PragmaRX\Google2FA\Exceptions\InvalidCharactersException;
 use PragmaRX\Google2FA\Exceptions\SecretKeyTooShortException;
 use PragmaRX\Google2FA\Exceptions\IncompatibleWithGoogleAuthenticatorException;

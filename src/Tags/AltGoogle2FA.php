@@ -19,7 +19,7 @@ use Statamic\Tags\Tags;
  */
 class AltGoogle2FA extends Tags
 {
-    protected $viteBuild = 'vendor/alt-inbound/build';
+    protected $viteBuild = 'vendor/alt-google-2fa/build';
     protected $viteHot = __DIR__ . '/../../resources/dist/hot';
     protected static $handle = 'AltGoogle2FA';
 
