@@ -9,7 +9,7 @@
     },
     "require": {
         "php": "^8.2",
-        "statamic/cms": "^4.0|^5.73.20|^6.14",
+        "statamic/cms": "^4.0|^5.74|^6.26",
         "pragmarx/google2fa-laravel": "^2.0.0",
         "bacon/bacon-qr-code": "^3.0.0"
     },
