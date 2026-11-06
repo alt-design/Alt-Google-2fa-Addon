@@ -45,7 +45,7 @@ class ServiceProvider extends AddonServiceProvider
     {
         Nav::extend(function ($nav) {
             $nav->content('Alt Google 2FA')
-                ->section('Tools')
+                ->section('Alt Tools')
                 ->route('alt-google-2fa.index')
                 ->icon(config('alt-google-2fa.alt_google_2fa_icon'));
         });
