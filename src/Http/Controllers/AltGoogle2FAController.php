@@ -37,7 +37,7 @@ class AltGoogle2FAController
 
             return PublishForm::make($blueprint)
                 ->title('Alt Google 2FA')
-                ->icon(config('alt-google-2fa.alt_google_2fa_icon'))
+                ->icon('phone-lock')
                 ->values($fields->values()->toArray())
                 ->submittingTo(cp_route('alt-google-2fa.save'), 'POST');
         }
