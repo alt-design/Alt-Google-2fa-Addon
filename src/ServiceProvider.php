@@ -4,6 +4,7 @@ namespace AltDesign\AltGoogle2FA;
 
 use Facades\Statamic\Version;
 use Illuminate\Support\Str;
+use AltDesign\AltGoogle2FA\Support\AltToolsNav;
 use Statamic\Facades\CP\Nav;
 use Statamic\Http\Middleware\AuthGuard;
 use Statamic\Providers\AddonServiceProvider;
@@ -44,10 +45,7 @@ class ServiceProvider extends AddonServiceProvider
     public function addToNav()
     {
         Nav::extend(function ($nav) {
-            $nav->content('Alt Google 2FA')
-                ->section('Tools')
-                ->route('alt-google-2fa.index')
-                ->icon(config('alt-google-2fa.alt_google_2fa_icon'));
+            AltToolsNav::add($nav, 'privacy', 'Alt Google 2FA', 'alt-google-2fa.index', null, ['phone-lock', 'lock']);
         });
     }
 
